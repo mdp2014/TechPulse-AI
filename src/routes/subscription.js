@@ -15,6 +15,8 @@ const subscribeLimiter = rateLimit({
   legacyHeaders: false
 });
 
+const codeLimiter = subscribeLimiter;
+
 // Email validation regex
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
