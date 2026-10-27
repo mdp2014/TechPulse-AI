@@ -1,0 +1,76 @@
+name: TechPulse AI — Automatisation 100% Gratuite
+
+on:
+  schedule:
+    # 06h15 heure de Paris (05h15 UTC en hiver, 04h15 UTC en été)
+    - cron: '15 4 * * *'
+    - cron: '15 5 * * *'
+    # 16h30 heure de Paris (15h30 UTC en hiver, 14h30 UTC en été)
+    - cron: '30 14 * * *'
+    - cron: '30 15 * * *'
+  workflow_dispatch:
+    inputs:
+      edition:
+        description: 'Édition à exécuter'
+        required: true
+        default: 'morning'
+        type: choice
+        options:
+          - morning
+          - afternoon
+
+permissions:
+  contents: write
+
+jobs:
+  run-techpulse:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Configurer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Installer les dépendances
+        run: npm ci
+
+      - name: Exécuter la génération et l'envoi
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: gemini-3.5-flash-lite
+          EMAIL_PROVIDER: ${{ secrets.EMAIL_PROVIDER || 'sandbox' }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT || '587' }}
+          SMTP_SECURE: ${{ secrets.SMTP_SECURE || 'false' }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          EMAIL_FROM: ${{ secrets.EMAIL_FROM || 'TechPulse AI <newsletter@techpulse.ai>' }}
+          TIMEZONE: Europe/Paris
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "Lancement manuel de l'édition : ${{ inputs.edition }}"
+            npm run edition:${{ inputs.edition }}
+          else
+            PARIS_HOUR=$(TZ=Europe/Paris date +%H)
+            echo "Heure actuelle à Paris : $PARIS_HOUR h"
+            if [ "$PARIS_HOUR" -lt "12" ]; then
+              echo "Lancement automatique de l'Édition du Matin (06h15)..."
+              npm run edition:morning
+            else
+              echo "Lancement automatique de l'Édition de l'Après-midi (16h30)..."
+              npm run edition:afternoon
+            fi
+          fi
+
+      - name: Sauvegarder les données et l'historique
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f data/*.db data/sandbox_emails/*.json data/sandbox_emails/*.html 2>/dev/null || true
+          git commit -m "chore: archivage automatique de l'édition [skip ci]" || echo "Aucune modification à sauvegarder"
+          git push || echo "Push ignoré"
