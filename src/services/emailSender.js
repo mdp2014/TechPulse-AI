@@ -192,7 +192,44 @@ export async function sendEditionToSubscribers(editionId) {
   }
 
   editionsDb.updateStatus(editionId, 'sent', new Date().toISOString());
-  logSystem('info', 'emailSender', `Dispatch completed for edition ${editionId}. Sent: ${sentCount}, Skipped: ${skippedCount}, Failed: ${failedCount}`);
-
   return { sent: sentCount, skipped: skippedCount, failed: failedCount };
 }
+
+/**
+ * Send latest edition immediately to a single new subscriber
+ */
+export async function sendEditionToSingleSubscriber(editionId, subscriber) {
+  const edition = editionsDb.getById(editionId);
+  if (!edition) return false;
+
+  const mailer = getTransporter();
+  const personalizedHtml = renderEditionHtml(edition.parsedContent, edition.id, subscriber);
+  const oneClickUnsubUrl = `${config.baseUrl}/api/unsubscribe/one-click?token=${subscriber.unsubscribe_token}`;
+
+  const mailOptions = {
+    from: config.email.from,
+    to: subscriber.email,
+    subject: `[${config.appName}] Bienvenue ! ${edition.title}`,
+    html: personalizedHtml,
+    headers: {
+      'List-Unsubscribe': `<${oneClickUnsubUrl}>, <mailto:unsubscribe@${new URL(config.baseUrl).hostname || 'techpulse.ai'}?subject=unsubscribe>`,
+      'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+      'X-Entity-Ref-ID': `welcome-${editionId}-${subscriber.id}`
+    }
+  };
+
+  try {
+    await mailer.sendMail(mailOptions);
+    deliveryLogsDb.recordAttempt({
+      editionId,
+      subscriberId: subscriber.id,
+      status: 'sent'
+    });
+    logSystem('info', 'emailSender', `Instant welcome edition sent to ${subscriber.email}`);
+    return true;
+  } catch (err) {
+    logSystem('error', 'emailSender', `Failed sending instant edition to ${subscriber.email}: ${err.message}`);
+    return false;
+  }
+}
+

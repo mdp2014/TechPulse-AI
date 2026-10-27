@@ -1,16 +1,16 @@
 import express from 'express';
 import rateLimit from 'express-rate-limit';
 import crypto from 'crypto';
-import { subscribersDb, verificationDb, logSystem } from '../db/index.js';
-import { sendVerificationCodeEmail } from '../services/emailSender.js';
+import { subscribersDb, verificationDb, editionsDb, db, logSystem } from '../db/index.js';
+import { sendVerificationCodeEmail, sendEditionToSingleSubscriber } from '../services/emailSender.js';
 
 export const subscriptionRouter = express.Router();
 
-// Rate limiter: Max 5 code requests per 10 minutes per IP
-const codeLimiter = rateLimit({
-  windowMs: 10 * 60 * 1000,
-  max: 5,
-  message: { success: false, error: 'Trop de demandes de code. Veuillez patienter 10 minutes.' },
+// Rate limiter: Max 10 subscription requests per minute per IP
+const subscribeLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 10,
+  message: { success: false, error: 'Trop de requêtes. Veuillez patienter un instant.' },
   standardHeaders: true,
   legacyHeaders: false
 });
@@ -23,9 +23,40 @@ function generate6DigitCode() {
 }
 
 /**
- * Request subscription verification code
- * POST /api/subscribe/request-code
+ * ⚡ Ultra-Simple Direct Subscription (1 champ email + 1 clic -> envoi immédiat)
+ * POST /api/subscribe
  */
+subscriptionRouter.post('/subscribe', subscribeLimiter, async (req, res) => {
+  const { email } = req.body;
+  if (!email || !EMAIL_REGEX.test(email.trim())) {
+    return res.status(400).json({ success: false, error: 'Veuillez saisir une adresse email valide.' });
+  }
+
+  const cleanEmail = email.trim().toLowerCase();
+
+  try {
+    // 1. Activer immédiatement l'abonné
+    subscribersDb.confirmSubscriber(cleanEmail);
+    const subscriber = db.prepare(`SELECT * FROM subscribers WHERE email = ?`).get(cleanEmail);
+
+    // 2. Récupérer la dernière édition générée et l'envoyer sur le champ
+    const latestEdition = editionsDb.getLatest();
+    if (latestEdition && subscriber) {
+      await sendEditionToSingleSubscriber(latestEdition.id, subscriber);
+    }
+
+    logSystem('info', 'subscription', `Direct instant subscription and email dispatch for ${cleanEmail}`);
+
+    return res.json({
+      success: true,
+      message: "C'est envoyé ! Vous venez de recevoir votre première édition par email, et vous recevrez les prochaines chaque jour à 6h15 et 16h30."
+    });
+  } catch (err) {
+    logSystem('error', 'subscription', `Direct subscription error for ${cleanEmail}: ${err.message}`);
+    return res.status(500).json({ success: false, error: "Erreur lors de l'envoi. Veuillez réessayer." });
+  }
+});
+
 subscriptionRouter.post('/subscribe/request-code', codeLimiter, async (req, res) => {
   const { email } = req.body;
 

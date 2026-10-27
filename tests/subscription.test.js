@@ -62,4 +62,13 @@ test('Subscription & Verification Flow', async (t) => {
     assert.equal(reactivated.status, 'active');
     assert.equal(reactivated.unsubscribed_at, null);
   });
+
+  await t.test('6. Direct instant subscription (1-step without code)', () => {
+    const instantEmail = `instant_${Date.now()}@testpulse.ai`;
+    subscribersDb.confirmSubscriber(instantEmail);
+    const sub = db.prepare(`SELECT * FROM subscribers WHERE email = ?`).get(instantEmail);
+    assert.ok(sub);
+    assert.equal(sub.status, 'active');
+    assert.ok(sub.confirmed_at);
+  });
 });
