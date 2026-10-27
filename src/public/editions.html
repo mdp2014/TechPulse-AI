@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full bg-slate-950 text-slate-100">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Archives des Éditions — TechPulse AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-full flex flex-col justify-between font-sans selection:bg-blue-500 selection:text-white">
+
+  <!-- Header -->
+  <header class="w-full max-w-5xl mx-auto px-6 py-8 flex items-center justify-between">
+    <a href="/" class="flex items-center space-x-3">
+      <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
+        <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+      </div>
+      <span class="text-xl font-black text-white">TechPulse <span class="text-blue-500">AI</span></span>
+    </a>
+    <a href="/" class="text-sm text-slate-400 hover:text-white transition">← Retour à l'accueil</a>
+  </header>
+
+  <!-- Main Content -->
+  <main class="w-full max-w-4xl mx-auto px-6 py-8 flex-1">
+    <div class="mb-10 text-center sm:text-left">
+      <h1 class="text-3xl font-extrabold text-white tracking-tight mb-2">Archives des Éditions Quotidiennes</h1>
+      <p class="text-slate-400 text-sm">
+        Consultez l'historique de nos journaux technologiques du matin (06h15) et de l'après-midi (16h30).
+      </p>
+    </div>
+
+    <!-- Editions List Container -->
+    <div id="editions-container" class="space-y-4">
+      <div class="text-center py-12 text-slate-500 text-sm">
+        Chargement des éditions...
+      </div>
+    </div>
+  </main>
+
+  <footer class="w-full max-w-5xl mx-auto px-6 py-8 border-t border-slate-900 text-xs text-slate-500 text-center">
+    TechPulse AI • Deux éditions par jour, 365 jours par an.
+  </footer>
+
+  <script>
+    async function loadEditions() {
+      const container = document.getElementById('editions-container');
+      try {
+        const res = await fetch('/api/editions');
+        const data = await res.json();
+        
+        if (!data.editions || data.editions.length === 0) {
+          container.innerHTML = `
+            <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-8 text-center">
+              <p class="text-slate-300 font-medium mb-1">Aucune édition archivée pour le moment.</p>
+              <p class="text-xs text-slate-500">Les premières éditions quotidiennes apparaîtront ici dès leur génération automatique.</p>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = data.editions.map(ed => {
+          const isMorning = ed.edition_type === 'morning';
+          const badgeClass = isMorning 
+            ? 'bg-blue-950 text-blue-400 border border-blue-800/60' 
+            : 'bg-amber-950 text-amber-400 border border-amber-800/60';
+          const badgeText = isMorning ? 'Édition Matin (06h15)' : 'Édition Après-midi (16h30)';
+
+          return `
+            <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-6 hover:border-slate-700 transition flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div class="flex-1">
+                <div class="flex items-center space-x-3 mb-2">
+                  <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-md ${badgeClass}">
+                    ${badgeText}
+                  </span>
+                  <span class="text-xs text-slate-400 font-medium">
+                    📅 ${ed.edition_date}
+                  </span>
+                  <span class="text-xs text-slate-500">
+                    • ${ed.stories_count || 0} sujets traités
+                  </span>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-1">${ed.title}</h3>
+                <p class="text-xs text-slate-400 line-clamp-2">${ed.summary}</p>
+              </div>
+              <div class="sm:shrink-0">
+                <a href="/editions/${ed.id}" target="_blank" class="inline-block px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs transition shadow-md">
+                  Lire l'édition →
+                </a>
+              </div>
+            </div>
+          `;
+        }).join('');
+      } catch (err) {
+        container.innerHTML = `<div class="text-rose-400 text-center py-8 text-sm">Erreur lors du chargement des archives.</div>`;
+      }
+    }
+    loadEditions();
+  </script>
+</body>
+</html>

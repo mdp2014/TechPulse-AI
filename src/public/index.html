@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full bg-slate-950 text-slate-100">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TechPulse AI — Le Journal Technologique Automatisé</title>
+  <meta name="description" content="Toute l'actualité technologique importante, expliquée par l'IA, directement dans votre boîte mail à 6h15 et 16h30.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/css/style.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              900: '#1e3a8a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="min-h-full flex flex-col justify-between font-sans selection:bg-brand-500 selection:text-white">
+
+  <!-- Background decorative glows -->
+  <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+    <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-brand-600/20 blur-[130px] rounded-full"></div>
+    <div class="absolute top-1/2 -left-40 w-[400px] h-[400px] bg-purple-600/15 blur-[120px] rounded-full"></div>
+  </div>
+
+  <!-- Header -->
+  <header class="w-full max-w-5xl mx-auto px-6 py-8 flex items-center justify-between">
+    <a href="/" class="flex items-center space-x-3 group">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-brand-500/25 ring-1 ring-white/20">
+        <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+      </div>
+      <div>
+        <span class="text-xl font-extrabold tracking-tight text-white block">TechPulse <span class="text-brand-500">AI</span></span>
+        <span class="text-[10px] uppercase font-bold tracking-widest text-slate-400 block -mt-1">Journal Quotidien</span>
+      </div>
+    </a>
+
+    <nav class="flex items-center space-x-6 text-sm font-medium text-slate-300">
+      <a href="/editions.html" class="hover:text-white transition">Archives</a>
+      <a href="/unsubscribe.html" class="hover:text-rose-400 transition">Désinscription</a>
+    </nav>
+  </header>
+
+  <!-- Main Hero Section -->
+  <main class="w-full max-w-3xl mx-auto px-6 py-12 flex-1 flex flex-col justify-center text-center">
+    
+    <!-- Badge -->
+    <div class="inline-flex items-center justify-center space-x-2 px-3.5 py-1.5 rounded-full bg-slate-900 border border-slate-800 text-xs font-semibold text-slate-300 mx-auto mb-8 shadow-sm">
+      <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+      <span>100% Autonome • Deux éditions chaque jour</span>
+    </div>
+
+    <!-- Main Headline -->
+    <h1 class="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-white leading-[1.15] mb-6">
+      Toute l'actualité tech, expliquée par l'IA, <span class="bg-gradient-to-r from-brand-500 to-indigo-400 bg-clip-text text-transparent">dans votre boîte mail.</span>
+    </h1>
+
+    <p class="text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
+      Une intelligence artificielle qui explore le Web, vérifie les faits, élimine le bruit et rédige chaque jour un vrai journal technologique clair, impartial et complet.
+    </p>
+
+    <!-- Subscription Form -->
+    <div class="max-w-md w-full mx-auto mb-12">
+      <form id="subscribe-form" class="flex flex-col sm:flex-row gap-3">
+        <input 
+          type="email" 
+          id="email-input" 
+          required 
+          placeholder="votre.email@exemple.com"
+          class="flex-1 px-4 py-3.5 rounded-xl bg-slate-900/90 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition text-base shadow-inner"
+        >
+        <button 
+          type="submit" 
+          id="submit-btn"
+          class="px-6 py-3.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-bold text-base shadow-lg shadow-brand-600/30 hover:shadow-brand-500/40 transition active:scale-[0.98] flex items-center justify-center whitespace-nowrap cursor-pointer"
+        >
+          <span id="btn-text">S'abonner gratuitement</span>
+          <svg id="btn-spinner" class="hidden w-5 h-5 ml-2 animate-spin text-white" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+          </svg>
+        </button>
+      </form>
+      <div id="form-alert" class="hidden mt-3 text-sm px-4 py-2.5 rounded-lg text-left"></div>
+    </div>
+
+    <!-- The Two Editions Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto text-left">
+      
+      <!-- Morning Edition Card -->
+      <div class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800/80 backdrop-blur-sm hover:border-slate-700 transition">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs font-bold uppercase tracking-wider text-brand-400 bg-brand-950/60 border border-brand-800/40 px-2.5 py-1 rounded-md">Édition Matinale</span>
+          <span class="text-sm font-black text-white">06 h 15</span>
+        </div>
+        <h3 class="text-base font-bold text-white mb-2">Le Grand Journal du Matin</h3>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          Synthèse exhaustive des actualités de la nuit, dossiers thématiques, annonces officielles vérifiées et radar de veille pour bien démarrer votre journée.
+        </p>
+      </div>
+
+      <!-- Afternoon Edition Card -->
+      <div class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800/80 backdrop-blur-sm hover:border-slate-700 transition">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs font-bold uppercase tracking-wider text-amber-400 bg-amber-950/60 border border-amber-800/40 px-2.5 py-1 rounded-md">Édition Après-Midi</span>
+          <span class="text-sm font-black text-white">16 h 30</span>
+        </div>
+        <h3 class="text-base font-bold text-white mb-2">Ce qu'il faut retenir</h3>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          Le récapitulatif des annonces publiées depuis ce matin, nouveaux lancements de la journée et mises à jour des sujets en cours. Sans répétition.
+        </p>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Modal Verification Code -->
+  <div id="code-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 sm:p-8 shadow-2xl relative">
+      <button id="close-modal-btn" class="absolute top-4 right-4 text-slate-400 hover:text-white transition">
+        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <div class="text-center mb-6">
+        <div class="w-12 h-12 rounded-xl bg-brand-600/20 text-brand-400 flex items-center justify-center mx-auto mb-4 border border-brand-500/20">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold text-white">Confirmez votre adresse email</h3>
+        <p class="text-sm text-slate-400 mt-2">
+          Un code temporaire à 6 chiffres a été envoyé à :<br>
+          <span id="target-email-display" class="font-bold text-white"></span>
+        </p>
+      </div>
+
+      <form id="verify-code-form" class="space-y-4">
+        <div>
+          <label for="code-input" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2 text-center">
+            Code de vérification (6 chiffres)
+          </label>
+          <input 
+            type="text" 
+            id="code-input" 
+            maxlength="6" 
+            pattern="[0-9]{6}" 
+            required 
+            placeholder="123456" 
+            autocomplete="one-time-code"
+            class="w-full text-center tracking-[12px] text-2xl font-mono py-3 rounded-xl bg-slate-950 border border-slate-700 text-white placeholder-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-500"
+          >
+        </div>
+
+        <button 
+          type="submit" 
+          id="verify-submit-btn"
+          class="w-full py-3.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-bold text-base shadow-lg shadow-brand-600/30 transition cursor-pointer"
+        >
+          Valider mon abonnement
+        </button>
+
+        <div id="modal-alert" class="hidden text-sm px-4 py-2.5 rounded-lg text-center"></div>
+
+        <div class="flex items-center justify-between text-xs text-slate-400 pt-2">
+          <span>Code valide pendant <strong id="countdown-timer" class="text-brand-400">15:00</strong></span>
+          <button type="button" id="resend-code-btn" class="text-brand-400 hover:underline">Renvoyer le code</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="w-full max-w-5xl mx-auto px-6 py-8 border-t border-slate-900 text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-4">
+    <div>
+      © 2026 TechPulse AI • Conçu pour une information technologique rigoureuse et automatisée.
+    </div>
+    <div class="flex items-center space-x-6">
+      <a href="/privacy.html" class="hover:text-slate-400 transition">Politique de confidentialité (RGPD)</a>
+      <a href="/unsubscribe.html" class="hover:text-slate-400 transition">Se désinscrire</a>
+    </div>
+  </footer>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
