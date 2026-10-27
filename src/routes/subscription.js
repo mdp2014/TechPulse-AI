@@ -128,9 +128,16 @@ subscriptionRouter.post('/subscribe/verify-code', async (req, res) => {
     subscribersDb.confirmSubscriber(cleanEmail);
     logSystem('info', 'subscription', `Confirmed subscription for ${cleanEmail}`);
 
+    // Send latest edition immediately as welcome
+    const subscriber = db.prepare(`SELECT * FROM subscribers WHERE email = ?`).get(cleanEmail);
+    const latestEdition = editionsDb.getLatest();
+    if (latestEdition && subscriber) {
+      await sendEditionToSingleSubscriber(latestEdition.id, subscriber);
+    }
+
     return res.json({
       success: true,
-      message: 'Votre abonnement à TechPulse AI est confirmé ! Vous recevrez la prochaine édition.'
+      message: 'Abonnement confirmé ! Vous recevrez désormais le journal chaque matin à 6h15 et chaque après-midi à 16h30.'
     });
   } catch (err) {
     logSystem('error', 'subscription', `Verification error for ${cleanEmail}: ${err.message}`);

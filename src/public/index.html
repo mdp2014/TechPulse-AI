@@ -3,16 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TechPulse AI — Le Journal Tech</title>
-  <meta name="description" content="Toute l'actualité tech dans votre boîte mail. Entrez votre email et recevez le journal.">
+  <title>TechPulse AI — Le Journal Tech Quotidien</title>
+  <meta name="description" content="Abonnez-vous à TechPulse AI. Recevez automatiquement le journal tech chaque matin à 6h15 et chaque après-midi à 16h30.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="min-h-full flex flex-col justify-between font-sans selection:bg-blue-600 selection:text-white px-6">
+<body class="min-h-full flex flex-col justify-between font-sans selection:bg-blue-600 selection:text-white px-4 sm:px-6">
 
-  <!-- Background Ambient Glow -->
+  <!-- Background Glow -->
   <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10">
     <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-blue-600/15 blur-[120px] rounded-full"></div>
   </div>
@@ -20,59 +20,145 @@
   <!-- Header -->
   <header class="w-full max-w-xl mx-auto py-8 flex items-center justify-between">
     <div class="flex items-center space-x-2.5">
-      <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center shadow-md shadow-blue-500/20">
-        <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <div class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/25">
+        <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z" />
         </svg>
       </div>
-      <span class="text-lg font-black tracking-tight text-white">TechPulse <span class="text-blue-500">AI</span></span>
+      <div>
+        <span class="text-lg font-black tracking-tight text-white block">TechPulse <span class="text-blue-500">AI</span></span>
+      </div>
     </div>
     <a href="/editions.html" class="text-xs text-slate-400 hover:text-white transition">Archives</a>
   </header>
 
-  <!-- Main Box : 1 champ email + 1 bouton Envoyer -->
-  <main class="w-full max-w-xl mx-auto flex-1 flex flex-col justify-center text-center py-12">
+  <!-- Main Card -->
+  <main class="w-full max-w-lg mx-auto flex-1 flex flex-col justify-center py-6">
     
-    <h1 class="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white mb-4">
-      L'actualité tech, <span class="text-blue-500">directement par email.</span>
-    </h1>
+    <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-10 shadow-2xl relative">
+      
+      <!-- Top Tag -->
+      <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-semibold text-slate-300 mb-6">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span>Matin 6h15 • Après-midi 16h30</span>
+      </div>
 
-    <p class="text-base text-slate-400 mb-8 max-w-md mx-auto">
-      Deux éditions quotidiennes automatisées : le matin à 6h15 et l'après-midi à 16h30.
-    </p>
+      <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-white mb-2">
+        Le journal technologique automatisé
+      </h1>
 
-    <!-- Ultra-Simple Form -->
-    <div class="max-w-md w-full mx-auto">
-      <form id="direct-form" class="flex flex-col sm:flex-row gap-2.5">
-        <input 
-          type="email" 
-          id="email-input" 
-          required 
-          placeholder="votre.email@exemple.com"
-          class="flex-1 px-4 py-3.5 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 text-base shadow-inner"
-        >
-        <button 
-          type="submit" 
-          id="submit-btn"
-          class="px-8 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-base shadow-lg shadow-blue-600/30 transition active:scale-[0.98] flex items-center justify-center cursor-pointer"
-        >
-          <span id="btn-text">Envoyer</span>
-          <svg id="btn-spinner" class="hidden w-5 h-5 ml-2 animate-spin text-white" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+      <p class="text-xs sm:text-sm text-slate-400 mb-8 leading-relaxed">
+        L'actualité tech recherchée et rédigée par l'IA, envoyée directement dans votre boîte mail deux fois par jour.
+      </p>
+
+      <!-- ÉTAPE 1 : Saisie de l'email -->
+      <div id="step-1">
+        <form id="email-form" class="space-y-3">
+          <div>
+            <label for="email-input" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2 text-left">
+              Votre adresse email
+            </label>
+            <input 
+              type="email" 
+              id="email-input" 
+              required 
+              placeholder="votre.email@exemple.com"
+              class="w-full px-4 py-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-base"
+            >
+          </div>
+          <button 
+            type="submit" 
+            id="send-code-btn"
+            class="w-full py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-base shadow-lg shadow-blue-600/30 transition active:scale-[0.98] cursor-pointer flex items-center justify-center"
+          >
+            <span id="btn-text-1">Recevoir mon code par email</span>
+            <svg id="spinner-1" class="hidden w-5 h-5 ml-2 animate-spin text-white" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+            </svg>
+          </button>
+        </form>
+      </div>
+
+      <!-- ÉTAPE 2 : Saisie du code reçu (masqué au départ) -->
+      <div id="step-2" class="hidden space-y-4">
+        <div class="bg-blue-950/40 border border-blue-900/60 rounded-xl p-3.5 text-left">
+          <p class="text-xs text-blue-200">
+            ✉️ Un code de vérification à 6 chiffres a été envoyé à :<br>
+            <strong id="sent-email-display" class="text-white text-sm"></strong>
+          </p>
+        </div>
+
+        <form id="code-form" class="space-y-3">
+          <div>
+            <label for="code-input" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2 text-left">
+              Code de vérification (6 chiffres)
+            </label>
+            <input 
+              type="text" 
+              id="code-input" 
+              required 
+              maxlength="6" 
+              pattern="[0-9]{6}" 
+              placeholder="123456" 
+              autocomplete="one-time-code"
+              class="w-full text-center tracking-[10px] text-2xl font-mono py-3 rounded-xl bg-slate-950 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+          </div>
+
+          <button 
+            type="submit" 
+            id="verify-btn"
+            class="w-full py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-base shadow-lg shadow-blue-600/30 transition active:scale-[0.98] cursor-pointer flex items-center justify-center"
+          >
+            <span id="btn-text-2">Valider et m'inscrire</span>
+            <svg id="spinner-2" class="hidden w-5 h-5 ml-2 animate-spin text-white" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+            </svg>
+          </button>
+
+          <div class="text-center pt-1">
+            <button type="button" id="change-email-btn" class="text-xs text-slate-400 hover:text-white underline">
+              Modifier l'adresse ou renvoyer le code
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- ÉTAPE 3 : Succès / Confirmation (masqué au départ) -->
+      <div id="step-3" class="hidden text-center py-4 space-y-4">
+        <div class="w-14 h-14 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto border border-emerald-500/30">
+          <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
           </svg>
-        </button>
-      </form>
+        </div>
+        <h2 class="text-xl font-bold text-white">Abonnement confirmé !</h2>
+        <p class="text-sm text-slate-300 leading-relaxed max-w-sm mx-auto">
+          Votre adresse est enregistrée. Vous recevrez automatiquement les éditions de <strong>TechPulse AI</strong> :
+        </p>
+        <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-4 text-xs text-slate-300 text-left space-y-2">
+          <div class="flex items-center space-x-2">
+            <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+            <span><strong>Chaque matin à 06 h 15 :</strong> Le grand journal matinal.</span>
+          </div>
+          <div class="flex items-center space-x-2">
+            <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+            <span><strong>Chaque après-midi à 16 h 30 :</strong> Ce qu'il faut retenir du jour.</span>
+          </div>
+        </div>
+      </div>
 
-      <!-- Feedback Alert -->
-      <div id="form-alert" class="hidden mt-4 text-sm px-4 py-3 rounded-xl text-center leading-relaxed font-medium"></div>
+      <!-- Feedback Banner (Erreur / Info) -->
+      <div id="alert-box" class="hidden mt-4 text-xs px-4 py-3 rounded-xl text-center font-medium leading-relaxed"></div>
+
     </div>
 
   </main>
 
   <!-- Footer -->
-  <footer class="w-full max-w-xl mx-auto py-6 border-t border-slate-900/80 text-xs text-slate-500 flex items-center justify-between">
-    <span>© TechPulse AI</span>
+  <footer class="w-full max-w-lg mx-auto py-6 border-t border-slate-900 text-xs text-slate-500 flex items-center justify-between">
+    <span>TechPulse AI</span>
     <div class="space-x-4">
       <a href="/privacy.html" class="hover:text-slate-400 transition">Confidentialité</a>
       <a href="/unsubscribe.html" class="hover:text-rose-400 transition">Se désinscrire</a>
@@ -80,51 +166,122 @@
   </footer>
 
   <script>
-    const form = document.getElementById('direct-form');
+    let currentEmail = '';
+
+    const step1 = document.getElementById('step-1');
+    const step2 = document.getElementById('step-2');
+    const step3 = document.getElementById('step-3');
+
+    const emailForm = document.getElementById('email-form');
     const emailInput = document.getElementById('email-input');
-    const submitBtn = document.getElementById('submit-btn');
-    const btnText = document.getElementById('btn-text');
-    const btnSpinner = document.getElementById('btn-spinner');
-    const alertBox = document.getElementById('form-alert');
+    const sendCodeBtn = document.getElementById('send-code-btn');
+    const btnText1 = document.getElementById('btn-text-1');
+    const spinner1 = document.getElementById('spinner-1');
 
-    form.addEventListener('submit', async (e) => {
+    const codeForm = document.getElementById('code-form');
+    const codeInput = document.getElementById('code-input');
+    const verifyBtn = document.getElementById('verify-btn');
+    const btnText2 = document.getElementById('btn-text-2');
+    const spinner2 = document.getElementById('spinner-2');
+    const sentEmailDisplay = document.getElementById('sent-email-display');
+    const changeEmailBtn = document.getElementById('change-email-btn');
+
+    const alertBox = document.getElementById('alert-box');
+
+    function showAlert(text, isSuccess = false) {
+      alertBox.classList.remove('hidden');
+      if (isSuccess) {
+        alertBox.className = 'mt-4 text-xs px-4 py-3 rounded-xl text-center font-medium leading-relaxed bg-emerald-950/80 text-emerald-300 border border-emerald-800/80';
+      } else {
+        alertBox.className = 'mt-4 text-xs px-4 py-3 rounded-xl text-center font-medium leading-relaxed bg-rose-950/80 text-rose-300 border border-rose-800/80';
+      }
+      alertBox.innerText = text;
+    }
+
+    // ÉTAPE 1 : Envoi de l'email pour recevoir le code
+    emailForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const email = emailInput.value.trim();
-      if (!email) return;
+      currentEmail = emailInput.value.trim();
+      if (!currentEmail) return;
 
-      btnText.innerText = 'Envoi...';
-      btnSpinner.classList.remove('hidden');
-      submitBtn.disabled = true;
+      btnText1.innerText = 'Envoi du code...';
+      spinner1.classList.remove('hidden');
+      sendCodeBtn.disabled = true;
       alertBox.classList.add('hidden');
 
       try {
-        const res = await fetch('/api/subscribe', {
+        const res = await fetch('/api/subscribe/request-code', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email })
+          body: JSON.stringify({ email: currentEmail })
+        });
+
+        const data = await res.json();
+
+        if (data.alreadyActive) {
+          showAlert(data.message, true);
+          return;
+        }
+
+        if (data.success) {
+          sentEmailDisplay.innerText = currentEmail;
+          step1.classList.add('hidden');
+          step2.classList.remove('hidden');
+          codeInput.value = '';
+          codeInput.focus();
+        } else {
+          showAlert(data.error || 'Erreur lors de l\'envoi du code.');
+        }
+      } catch (err) {
+        showAlert('Impossible de contacter le serveur.');
+      } finally {
+        btnText1.innerText = 'Recevoir mon code par email';
+        spinner1.classList.add('hidden');
+        sendCodeBtn.disabled = false;
+      }
+    });
+
+    // ÉTAPE 2 : Vérification du code saisi
+    codeForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const code = codeInput.value.trim();
+      if (!code) return;
+
+      btnText2.innerText = 'Vérification...';
+      spinner2.classList.remove('hidden');
+      verifyBtn.disabled = true;
+      alertBox.classList.add('hidden');
+
+      try {
+        const res = await fetch('/api/subscribe/verify-code', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: currentEmail, code })
         });
 
         const data = await res.json();
 
         if (data.success) {
-          alertBox.className = 'mt-4 text-sm px-4 py-3 rounded-xl text-center leading-relaxed font-medium bg-emerald-950/80 text-emerald-300 border border-emerald-800/80';
-          alertBox.innerText = data.message;
-          alertBox.classList.remove('hidden');
-          emailInput.value = '';
+          step2.classList.add('hidden');
+          step3.classList.remove('hidden');
         } else {
-          alertBox.className = 'mt-4 text-sm px-4 py-3 rounded-xl text-center leading-relaxed font-medium bg-rose-950/80 text-rose-300 border border-rose-800/80';
-          alertBox.innerText = data.error || 'Erreur lors de l\'envoi.';
-          alertBox.classList.remove('hidden');
+          showAlert(data.error || 'Code invalide.');
         }
       } catch (err) {
-        alertBox.className = 'mt-4 text-sm px-4 py-3 rounded-xl text-center leading-relaxed font-medium bg-rose-950/80 text-rose-300 border border-rose-800/80';
-        alertBox.innerText = 'Impossible de joindre le serveur. Réessayez dans un instant.';
-        alertBox.classList.remove('hidden');
+        showAlert('Impossible de valider le code.');
       } finally {
-        btnText.innerText = 'Envoyer';
-        btnSpinner.classList.add('hidden');
-        submitBtn.disabled = false;
+        btnText2.innerText = 'Valider et m\'inscrire';
+        spinner2.classList.add('hidden');
+        verifyBtn.disabled = false;
       }
+    });
+
+    // Bouton retour / modification d'email
+    changeEmailBtn.addEventListener('click', () => {
+      step2.classList.add('hidden');
+      step1.classList.remove('hidden');
+      alertBox.classList.add('hidden');
+      emailInput.focus();
     });
   </script>
 </body>
